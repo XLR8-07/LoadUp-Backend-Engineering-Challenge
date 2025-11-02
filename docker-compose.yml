@@ -56,6 +56,8 @@ services:
         npm run db:setup || echo 'Database may already exist' &&
         echo '🚀 Running migrations...' &&
         npm run db:migrate &&
+        echo '🌱 Seeding sample data...' &&
+        npm run db:seed &&
         echo '✅ Starting application...' &&
         npm start
       "
