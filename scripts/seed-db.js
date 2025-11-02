@@ -422,6 +422,12 @@ async function seed() {
     try {
         console.log("Starting database seed...");
 
+        // Clear existing data first to avoid foreign key conflicts
+        console.log("\nClearing existing data...");
+        await client.query("DELETE FROM applications");
+        await client.query("DELETE FROM jobs");
+        console.log("  ✓ Existing data cleared");
+
         // Insert jobs
         console.log(`\nInserting ${jobs.length} jobs...`);
         for (const job of jobs) {
