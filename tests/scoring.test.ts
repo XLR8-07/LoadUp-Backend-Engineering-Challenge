@@ -33,7 +33,8 @@ describe("Scoring Engine", () => {
 
       expect(result.awarded).toBe(0);
       expect(result.max).toBe(10);
-      expect(result.reason).toBe("Did not match correct option");
+      expect(result.reason).toContain("Go");
+      expect(result.reason).toContain("Python");
     });
 
     it("should handle invalid answer type", () => {

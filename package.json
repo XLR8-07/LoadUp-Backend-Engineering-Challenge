@@ -7,12 +7,16 @@
         "dev": "tsx watch src/server.ts",
         "build": "tsc",
         "start": "node dist/server.js",
-        "test": "vitest",
+        "test": "vitest run",
         "test:watch": "vitest --watch",
+        "test:ui": "vitest --ui",
+        "test:coverage": "vitest run --coverage",
         "lint": "eslint src --ext .ts",
         "db:setup": "node scripts/setup-db.js",
         "db:migrate": "node scripts/migrate.js",
         "db:clean": "node scripts/clean-db.js",
+        "db:seed": "node scripts/seed-db.js",
+        "db:reset": "npm run db:clean && npm run db:migrate && npm run db:seed",
         "setup": "npm install && npm run db:setup && npm run db:migrate"
     },
     "keywords": [
