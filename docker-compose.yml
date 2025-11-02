@@ -1,25 +1,69 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: loadupSE
+    container_name: job_application_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: loadup
+      POSTGRES_DB: job_application_service
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U postgres -d job_application_service"]
+      interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 10s
+    networks:
+      - app-network
+
+  # Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: job_application_service
+    environment:
+      # Database Configuration
+      USE_IN_MEMORY: "false"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: job_application_service
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_POOL_MIN: 2
+      DB_POOL_MAX: 10
+      
+      # Server Configuration
+      PORT: 3000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    command: >
+      sh -c "
+        echo '⏳ Waiting for database to be fully ready...' &&
+        sleep 5 &&
+        echo '🔧 Setting up database...' &&
+        npm run db:setup || echo 'Database may already exist' &&
+        echo '🚀 Running migrations...' &&
+        npm run db:migrate &&
+        echo '✅ Starting application...' &&
+        npm start
+      "
 
 volumes:
   postgres_data:
     driver: local
 
+networks:
+  app-network:
+    driver: bridge

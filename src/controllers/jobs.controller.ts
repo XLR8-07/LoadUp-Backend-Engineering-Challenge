@@ -28,7 +28,7 @@ export class JobsController {
     }
   };
 
-  listJobs = async (req: Request, res: Response): Promise<void> => {
+  listJobs = async (_req: Request, res: Response): Promise<void> => {
     try {
       const jobs = await this.jobsService.listJobs();
       res.status(200).json(jobs);

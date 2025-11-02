@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { ApplicationsService } from "../application/applications.service";
+import type { ApplicationsService, ListApplicationsQuery } from "../application/applications.service";
 import { formatErrorResponse } from "../shared/errors";
 import { logger } from "../shared/logger";
 
@@ -26,8 +26,9 @@ export class ApplicationsController {
   listApplicationsForJob = async (req: Request, res: Response): Promise<void> => {
     try {
       const jobId = req.params.id;
-      const query = {
-        sort: (req.query.sort as string) || "score_desc",
+      const sortParam = req.query.sort as string | undefined;
+      const query: ListApplicationsQuery = {
+        sort: (sortParam === "score_asc" || sortParam === "score_desc") ? sortParam : "score_desc",
         limit: req.query.limit ? parseInt(req.query.limit as string, 10) : 50,
         offset: req.query.offset ? parseInt(req.query.offset as string, 10) : 0
       };
