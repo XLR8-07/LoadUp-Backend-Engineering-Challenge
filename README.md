@@ -55,21 +55,66 @@ A production-ready HTTP service for creating job postings with structured questi
 ## Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- Docker & Docker Compose (for PostgreSQL setup)
+- Node.js 18+ 
+- Docker & Docker Compose
 
-### One-Command Setup & Run
+### Option 1: Docker Setup
 
 ```bash
-# Clone and setup
+# Install dependencies and run everything
 npm install
-
-# Run with Docker (PostgreSQL + Application)
 docker-compose up --build
 ```
 
+**Wait for the logs to show:** `✅ Starting application...`
+
+This will automatically:
+- ✅ Start PostgreSQL in Docker
+- ✅ Create database and tables
+- ✅ Load sample data (3 jobs + 6 applications)
+
+Then visit:
 - **Server:** http://localhost:3000
 - **API Docs:** http://localhost:3000/docs (Interactive Swagger UI)
+- **Try it out:** Sample jobs are already loaded - test the API immediately!
+
+### Option 2: Local Setup (Fallback)
+
+```bash
+# Install dependencies
+npm run setup
+
+# Run in development mode (in-memory - no database needed)
+npm run dev
+```
+
+Then visit http://localhost:3000/docs
+
+---
+
+## Sample Data
+
+When you run `docker-compose up` or `npm run setup`, the database is automatically seeded with:
+
+- **3 Sample Jobs:**
+  - Senior Data Engineer (Remote)
+  - Frontend Developer (San Francisco)
+  - DevOps Engineer (New York)
+
+- **6 Sample Applications** across these jobs
+
+**Try it immediately:**
+```bash
+# List all jobs
+curl http://localhost:3000/api/v1/jobs
+
+# Get a specific job (copy an ID from the list)
+curl http://localhost:3000/api/v1/jobs/{jobId}
+
+# List applications for a job (sorted by score)
+curl http://localhost:3000/api/v1/jobs/{jobId}/applications
+```
+
 ---
 
 ## API Endpoints
@@ -91,8 +136,13 @@ All endpoints are prefixed with `/api/v1`
 
 ## Quick Example
 
+> **Note:** If you used Docker or `npm run setup`, sample data is already loaded!  
+> Visit http://localhost:3000/docs and try the GET endpoints first.
+
+### Create a Job
+
 ```bash
-# 1. Create a job
+# 1. Create a new job
 curl -X POST http://localhost:3000/api/v1/jobs \
   -H "Content-Type: application/json" \
   -d '{
