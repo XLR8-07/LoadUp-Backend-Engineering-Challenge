@@ -78,14 +78,32 @@ Then visit:
 - **API Docs:** http://localhost:3000/docs (Interactive Swagger UI)
 - **Try it out:** Sample jobs are already loaded - test the API immediately!
 
-### Option 2: Local Setup (Fallback)
+### Option 2: Local Development with PostgreSQL
 
 ```bash
-# Install dependencies
+# 1. Start PostgreSQL in Docker (runs in background)
+npm run db:docker
+
+# 2. Setup database (creates tables + seeds data)
 npm run setup
 
-# Run in development mode (in-memory - no database needed)
+# 3. Run the application
 npm run dev
+```
+
+Then visit http://localhost:3000/docs
+
+**To stop PostgreSQL later:**
+```bash
+npm run db:docker:stop
+```
+
+### Option 3: In-Memory Mode (No Database)
+
+```bash
+# Quick testing without any database
+npm install
+npm run dev:memory
 ```
 
 Then visit http://localhost:3000/docs
@@ -357,17 +375,7 @@ tests/
 - **Comprehensive Testing** - 107 tests covering all scenarios
 - **Error Handling** - Consistent JSON error responses
 
----
 
-## Development Scripts
-
-```bash
-npm run dev        # Development mode with hot-reload
-npm run build      # Build for production
-npm start          # Run production build
-npm test           # Run tests
-npm run setup      # Setup database (PostgreSQL only)
-```
 
 ---
 

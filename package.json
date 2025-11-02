@@ -5,6 +5,7 @@
     "main": "dist/server.js",
     "scripts": {
         "dev": "tsx watch src/server.ts",
+        "dev:memory": "USE_IN_MEMORY=true tsx watch src/server.ts",
         "build": "tsc",
         "start": "node dist/server.js",
         "test": "vitest run",
@@ -12,6 +13,8 @@
         "test:ui": "vitest --ui",
         "test:coverage": "vitest run --coverage",
         "lint": "eslint src --ext .ts",
+        "db:docker": "docker run -d --name job_app_postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=job_application_service -p 5432:5432 postgres:15-alpine && echo '⏳ Waiting for PostgreSQL to start...' && sleep 5 && echo '✅ PostgreSQL is ready!'",
+        "db:docker:stop": "docker stop job_app_postgres && docker rm job_app_postgres",
         "db:setup": "node scripts/setup-db.js",
         "db:migrate": "node scripts/migrate.js",
         "db:clean": "node scripts/clean-db.js",
